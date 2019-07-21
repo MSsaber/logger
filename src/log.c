@@ -110,7 +110,7 @@ int initialize_logger(long *logger_fd,
     memcpy(file_path, path, path_len);
     memcpy(file_path + path_len, file_name, file_name_len);
 
-    logger->log_file = fopen(file_path, "a");
+    logger->log_file = fopen(file_path, "w");
     if (!logger->log_file) {
         res = LOG_FOE;
         goto error;

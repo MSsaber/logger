@@ -11,7 +11,7 @@ int main(void)
 
     OPEN(&log_fd ,PATH, FILE_NAME);
 
-    printf("log_fd : %llu\n", log_fd);
+    printf("log_fd : %lu\n", log_fd);
 
     ILOG(log_fd, "Hallo World[%d]\n", 1);
     DLOG(log_fd, "Hallo World[%d]\n", 2);
