@@ -2,6 +2,7 @@
 #define LOG_H_
 
 #include <stdint.h>
+#include <stdbool.h>
 
 /**
  * func : initialize a logger
@@ -23,6 +24,6 @@ extern int initialize_logger(long *logger_fd,
  */
 extern void destory_logger(long logger_fd);
 
-extern void log(char *format, ...);
+extern void log_info(long logger_fd, bool dt, char *format, ...);
 
 #endif /*LOG_H_*/

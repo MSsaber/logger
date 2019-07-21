@@ -1,16 +1,15 @@
-out = ./out
-
-include = include
-
-object = $(out)/log.o
+src = $(wildcard ./src/*.c)
+obj = $(patsubst ./src/%.c, ./out/%.o, $(src))
 
 target = log.a
+CC = gcc
 
-$(target) : $(object)
-	gcc -static -o -I$(include) $(target) $(object)
+$(target) : ./out/log.o
+	$(CC) $(target) -static -o $@
 
-$(object) : log.h ./src/log.c
+log.o : log.c
+	$(CC) -c $< -o $@
 
 #.PHONY ： clean
-clean : 
-	rm $(target) $(object)
+clean :
+	rm $(out)
