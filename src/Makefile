@@ -2,6 +2,8 @@ INCLUDE = ../include
 
 OUT = ../out/
 
+CFLAG = -DSTATIC_CONFIG
+
 PROJECT_SRC = log.c
 
 OBJECT = log.o
@@ -13,11 +15,9 @@ AR = ar
 
 $(TARGET) : $(OBJECT)
 	$(AR) -r $(TARGET) $(OBJECT)
-	move $(TARGET) $(OUT)
 
 $(OBJECT) : $(PROJECT_SRC)
-	$(CC) -c $< -I$(INCLUDE) -o $@
-#	move $@ $(out)
+	$(CC) -c $(CFLAG) $< -I$(INCLUDE) -o $@
 
 clean :
 	del $(OBJECT) $(TARGET)

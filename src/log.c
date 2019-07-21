@@ -11,6 +11,8 @@
 #define LOG_GENERAIC   0x0000fffe
 #define LOG_OUT_OF_MEM 0x0000ffff
 
+#define START_YEAR 1900
+
 #define ALLOC(size, c, type) ((type) alloc(size, c))
 
 #ifdef STATIC_CONFIG
@@ -43,7 +45,7 @@ static uint32_t move_buffer(char *in, uint32_t in_len,
 
     *out_len = 0;
     buf  = ALLOC(in_len + 1, 0x00, pchar);
-    if (buf) return LOG_OUT_OF_MEM;
+    if (!buf) return LOG_OUT_OF_MEM;
 
     *out_len = in_len;
     memcpy(buf, in, in_len);
@@ -68,6 +70,22 @@ static void destory_logger_handle(Log* handle)
     free(handle);
 }
 
+static void time_log(FILE *f)
+{
+    time_t t;
+    struct tm * a;
+    time(&t);
+    a=localtime(&t);
+
+    printf("%4d-%02d-%02d %02d:%02d:%02d  ",
+        START_YEAR + a->tm_year,1+a->tm_mon,a->tm_mday,
+        a->tm_hour,a->tm_min,a->tm_sec); 
+
+    fprintf(f, "%4d-%02d-%02d %02d:%02d:%02d  ",
+        START_YEAR + a->tm_year,1+a->tm_mon,a->tm_mday,
+        a->tm_hour,a->tm_min,a->tm_sec);
+}
+
 int initialize_logger(long *logger_fd,
                       char *path, uint32_t path_len,
                       char *file_name, uint32_t file_name_len)
@@ -77,11 +95,10 @@ int initialize_logger(long *logger_fd,
     char *file_path = NULL;
 
     logger = ALLOC(sizeof(Log), 0x00, Log *);
-    if (logger) return LOG_OUT_OF_MEM;
+    if (!logger) return LOG_OUT_OF_MEM;
     logger->file_name = NULL;
     logger->path = NULL;
     logger->log_file = NULL;
-
     res = move_buffer(path, path_len, &logger->path, &path_len);
     if (res) goto error;
 
@@ -93,7 +110,7 @@ int initialize_logger(long *logger_fd,
     memcpy(file_path, path, path_len);
     memcpy(file_path + path_len, file_name, file_name_len);
 
-    logger->log_file = fopen(file_path, "r+");
+    logger->log_file = fopen(file_path, "a");
     if (!logger->log_file) {
         res = LOG_FOE;
         goto error;
@@ -121,12 +138,18 @@ void destory_logger(long logger_fd)
 void log_info(long logger_fd, bool dt, char *format, ...)
 {
     (void) dt;
+    char buf[512];
     Log *logger = (Log *) logger_fd;
     if (!logger_fd) return;
+
+    if (dt)
+        time_log(logger->log_file);
 
     va_list args;
 
     va_start(args, format);
-    fprintf(logger->log_file, format, args);
+    vsprintf(buf,format,args);
+    fprintf(logger->log_file, "%s", buf);
+    printf("%s", buf);
     va_end(args);
 }
