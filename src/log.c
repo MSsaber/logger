@@ -137,7 +137,6 @@ void destory_logger(long logger_fd)
 
 void log_info(long logger_fd, bool dt, char *format, ...)
 {
-    (void) dt;
     char buf[512];
     Log *logger = (Log *) logger_fd;
     if (!logger_fd) return;
@@ -153,3 +152,38 @@ void log_info(long logger_fd, bool dt, char *format, ...)
     printf("%s", buf);
     va_end(args);
 }
+
+void hexdump(long logger_fd, char *buf, uint32_t buf_size)
+{
+    if (!logger_fd) return;
+
+    if (!buf) {
+        log_info(logger_fd, true, "Invalid buffer\n");
+        return;
+    }
+
+    if (buf_size == 0) {
+        log_info(logger_fd, true, "Invalid length\n");
+        return;
+    }
+
+    for (uint32_t i = 0; i < buf_size; i++) {
+        if (i == 0) {
+            log_info(logger_fd, true, "%02x: ", buf[i]);
+        } else {
+            log_info(logger_fd, false, "%02x: ", buf[i]);
+        }
+
+        if ((i + 1) % 8 == 0 && i != 0) {
+            log_info(logger_fd, false, "\n");
+        }
+    }
+
+    if (buf_size % 8 != 0) {
+        log_info(logger_fd, false, "\n");
+    }
+}
+
+
+
+

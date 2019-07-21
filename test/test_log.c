@@ -13,10 +13,13 @@ int main(void)
 
     printf("log_fd : %lu\n", log_fd);
 
-    ILOG(log_fd, "Hallo World[%d]\n", 1);
-    DLOG(log_fd, "Hallo World[%d]\n", 2);
-    ELOG(log_fd, "Hallo World[%d]\n", 3);
-    WLOG(log_fd, "Hallo World[%d]\n", 4);
+    ILOG(log_fd, "Hello World[%d]\n", 1);
+    DLOG(log_fd, "Hello World[%d]\n", 2);
+	//sleep(10);
+    ELOG(log_fd, "Hello World[%d]\n", 3);
+    WLOG(log_fd, "Hello World[%d]\n", 4);
+
+    HEXDUMP(log_fd, "HelloHelloHelloHello", 20);
 
     CLOSE(log_fd);
     return 0;

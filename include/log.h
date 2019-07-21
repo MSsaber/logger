@@ -26,4 +26,6 @@ extern void destory_logger(long logger_fd);
 
 extern void log_info(long logger_fd, bool dt, char *format, ...);
 
+extern void hexdump(long logger_fd, char *buf, uint32_t buf_size);
+
 #endif /*LOG_H_*/

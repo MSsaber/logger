@@ -34,6 +34,7 @@ extern long logger;
 
 #define WLOG(fd, fmt, ...) log_info(fd, true, "[WRANING] %s : %d " fmt, __func__, __LINE__, ##__VA_ARGS__)
 
+#define HEXDUMP(fd, buf, size) hexdump(fd, buf, size)
 
 #endif
 
