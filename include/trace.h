@@ -18,7 +18,9 @@ extern long logger;
 
 #define ELOG(fmt, ...) log_info(logger, true, "[ERROR] %s : %d " fmt, __func__, __LINE__, ##__VA_ARGS__)
 
-#define WLOG(fmt, ...) log_info(logger, true, "[WRANING] %s : %d " fmt, __func__, __LINE__, ##__VA_ARGS__)
+#define WLOG(fmt, ...) log_info(logger, true, "[WARNING] %s : %d " fmt, __func__, __LINE__, ##__VA_ARGS__)
+
+#define HEXDUMP(fmt, ...) hexdump(logger, buf, size)
 
 #else
 
@@ -32,7 +34,7 @@ extern long logger;
 
 #define ELOG(fd, fmt, ...) log_info(fd, true, "[ERROR] %s : %d " fmt, __func__, __LINE__, ##__VA_ARGS__)
 
-#define WLOG(fd, fmt, ...) log_info(fd, true, "[WRANING] %s : %d " fmt, __func__, __LINE__, ##__VA_ARGS__)
+#define WLOG(fd, fmt, ...) log_info(fd, true, "[WARNING] %s : %d " fmt, __func__, __LINE__, ##__VA_ARGS__)
 
 #define HEXDUMP(fd, buf, size) hexdump(fd, buf, size)
 

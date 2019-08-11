@@ -86,13 +86,45 @@ static void time_log(FILE *f)
         a->tm_hour,a->tm_min,a->tm_sec);
 }
 
+static int open_file(Log *logger)
+{
+    uint32_t res = LOG_SUCCESS;
+    char *file_path = NULL;
+    uint32_t path_len = 0;
+    uint32_t file_name_len = 0;
+
+    if (!logger->file_name || !logger->path) {
+        printf("No log file info\n");
+        return LOG_GENERAIC;
+    }
+
+    path_len = strlen(logger->path);
+    file_name_len = strlen(logger->file_name);
+
+    file_path = ALLOC(path_len + file_name_len + 1, 0x00, char *);
+    if (!file_path) return LOG_OUT_OF_MEM;
+
+    memcpy(file_path, logger->path, path_len);
+    memcpy(file_path + path_len, logger->file_name, file_name_len);
+
+    logger->log_file = fopen(file_path, "a");
+    if (!logger->log_file) {
+        res = LOG_FOE;
+        goto error;
+    }
+
+error:
+    if (file_path)
+        free(file_path);
+    return (int) res;
+}
+
 int initialize_logger(long *logger_fd,
                       char *path, uint32_t path_len,
                       char *file_name, uint32_t file_name_len)
 {
     uint32_t res = LOG_SUCCESS;
     Log *logger = NULL;
-    char *file_path = NULL;
 
     logger = ALLOC(sizeof(Log), 0x00, Log *);
     if (!logger) return LOG_OUT_OF_MEM;
@@ -102,28 +134,13 @@ int initialize_logger(long *logger_fd,
     res = move_buffer(path, path_len, &logger->path, &path_len);
     if (res) goto error;
 
-    res = move_buffer(path, path_len, &logger->file_name, &file_name_len);
+    res = move_buffer(file_name, file_name_len, &logger->file_name, &file_name_len);
     if (res) goto error;
-
-    file_path = ALLOC(path_len + file_name_len, 0x00, char *);
-    if (!file_path) goto error;
-    memcpy(file_path, path, path_len);
-    memcpy(file_path + path_len, file_name, file_name_len);
-
-    logger->log_file = fopen(file_path, "w");
-    if (!logger->log_file) {
-        res = LOG_FOE;
-        goto error;
-    }
 
     *logger_fd = (long) logger;
 
-    free(file_path);
-
     return (int) LOG_SUCCESS;
 error:
-    if (file_path)
-        free(file_path);
     destory_logger_handle(logger);
     return (int) res;
 }
@@ -141,6 +158,8 @@ void log_info(long logger_fd, bool dt, char *format, ...)
     Log *logger = (Log *) logger_fd;
     if (!logger_fd) return;
 
+    if (open_file(logger)) return;
+
     if (dt)
         time_log(logger->log_file);
 
@@ -151,6 +170,9 @@ void log_info(long logger_fd, bool dt, char *format, ...)
     fprintf(logger->log_file, "%s", buf);
     printf("%s", buf);
     va_end(args);
+
+    fclose(logger->log_file);
+    logger->log_file = NULL;
 }
 
 void hexdump(long logger_fd, char *buf, uint32_t buf_size)
@@ -168,7 +190,7 @@ void hexdump(long logger_fd, char *buf, uint32_t buf_size)
     }
 
     for (uint32_t i = 0; i < buf_size; i++) {
-        if (i == 0) {
+        if (i == 0 || i % 8 == 0) {
             log_info(logger_fd, true, "%02x: ", buf[i]);
         } else {
             log_info(logger_fd, false, "%02x: ", buf[i]);
