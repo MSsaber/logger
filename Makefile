@@ -1,15 +1,19 @@
 src = $(wildcard ./src/*.c)
-obj = $(patsubst ./src/%.c, ./out/%.o, $(src))
+obj = $(patsubst ./src/%.c, ./src/%.o, $(src))
 
-target = log.a
+cflag = -I./include
+
+target = ./out/liblog.a
 CC = gcc
+AR = ar
 
-$(target) : ./out/log.o
-	$(CC) $(target) -static -o $@
+$(target) : $(obj)
+	mkdir out
+	$(AR) -r $(target) $<
 
-log.o : log.c
-	$(CC) -c $< -o $@
+$(obj) : $(src)
+	$(CC) $(cflag) -c $< -o $@
 
 #.PHONY ： clean
 clean :
-	rm $(out)
+	rm -r ./out $(obj)
