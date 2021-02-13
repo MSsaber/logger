@@ -2,13 +2,11 @@ INCLUDE = ../include
 
 OUT = ../out/
 
-CFLAG = -DSTATIC_CONFIG
-
 PROJECT_SRC = log.c
 
 OBJECT = log.o
 
-TARGET = log.a
+TARGET = liblog.a
 
 CC = gcc
 AR = ar

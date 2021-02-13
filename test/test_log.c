@@ -3,7 +3,11 @@
 #include <trace.h>
 
 #define FILE_NAME "log"
+#if PLATFORM_GE
+#define PATH "./"
+#else
 #define PATH "C:\\Users\\86189\\Desktop\\"
+#endif
 
 int main(void)
 {

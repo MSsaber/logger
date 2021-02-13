@@ -1,6 +1,8 @@
 INCLUDE = ../include
 
-BUILD_STATIC_LIB = ../src/log.a
+BUILD_STATIC_LIB = -L../src/log.a
+
+PLATFORM = -DPLATFORM_GE=1
 
 PROJCT_SRC = test_log.c
 
@@ -11,10 +13,10 @@ TARGET = log
 CC = gcc
 
 $(TARGET) : $(OBJECT)
-	$(CC) $(OBJECT) -o $(TARGET) $(BUILD_STATIC_LIB)
+	$(CC) $(OBJECT) -o $(TARGET) $(BUILD_STATIC_LIB) $(PLATFORM)
 
 $(OBJECT) : $(PROJCT_SRC)
-	$(CC) -c $< -I$(INCLUDE) -o $@ $(BUILD_STATIC_LIB)
+	$(CC) -c $< -I$(INCLUDE) -o $@ $(BUILD_STATIC_LIB) $(PLATFORM)
 
 clean :
 	rm $(TARGET) $(OBJECT)
