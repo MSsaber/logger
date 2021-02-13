@@ -2,6 +2,7 @@
 #define TRACE_H_
 
 #include <log.h>
+#include <config.h>
 #include <string.h>
 
 #ifdef STATIC_CONFIG
