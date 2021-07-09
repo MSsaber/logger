@@ -8,6 +8,8 @@ OBJECT = log.o
 
 TARGET = liblog.a
 
+CFLAG = -std=c99
+
 CC = gcc
 AR = ar
 

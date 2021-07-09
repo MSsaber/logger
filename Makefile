@@ -1,7 +1,7 @@
 src = $(wildcard ./src/*.c)
 obj = $(patsubst ./src/%.c, ./src/%.o, $(src))
 
-cflag = -I./include
+cflag = -I./include -std=c99
 
 target = ./out/liblog.a
 CC = gcc
