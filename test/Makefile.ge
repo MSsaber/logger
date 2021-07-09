@@ -1,6 +1,6 @@
 INCLUDE = ../include
 
-BUILD_STATIC_LIB = -L../src/log.a
+BUILD_STATIC_LIB = -L../src/ -llog
 
 PLATFORM = -DPLATFORM_GE=1
 

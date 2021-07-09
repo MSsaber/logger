@@ -2,7 +2,7 @@
 #include <log.h>
 #include <trace.h>
 
-#define FILE_NAME "log"
+#define FILE_NAME "testlog"
 #if PLATFORM_GE
 #define PATH "./"
 #else
