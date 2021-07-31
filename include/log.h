@@ -4,6 +4,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * func : initialize a logger
  * param :
@@ -27,5 +31,9 @@ extern void destory_logger(long logger_fd);
 extern void log_info(long logger_fd, bool dt, char *format, ...);
 
 extern void hexdump(long logger_fd, char *buf, uint32_t buf_size);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /*LOG_H_*/
