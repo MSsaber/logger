@@ -5,6 +5,15 @@
 #include <config.h>
 #include <string.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+extern void logger_print(const char *fmt, ...);
+
+#ifdef __cplusplus
+}
+#endif
+
 #ifdef STATIC_CONFIG
 
 extern long logger;

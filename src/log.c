@@ -77,7 +77,7 @@ static void time_log(FILE *f)
     time(&t);
     a=localtime(&t);
 
-    printf("%4d-%02d-%02d %02d:%02d:%02d  ",
+    logger_print("%4d-%02d-%02d %02d:%02d:%02d  ",
         START_YEAR + a->tm_year,1+a->tm_mon,a->tm_mday,
         a->tm_hour,a->tm_min,a->tm_sec); 
 
@@ -94,7 +94,7 @@ static int open_file(Log *logger)
     uint32_t file_name_len = 0;
 
     if (!logger->file_name || !logger->path) {
-        printf("No log file info\n");
+        logger_print("No log file info\n");
         return LOG_GENERAIC;
     }
 
@@ -168,7 +168,7 @@ void log_info(long logger_fd, bool dt, const char *format, ...)
     va_start(args, format);
     vsprintf(buf,format,args);
     fprintf(logger->log_file, "%s", buf);
-    printf("%s", buf);
+    logger_print("%s", buf);
     va_end(args);
 
     fclose(logger->log_file);

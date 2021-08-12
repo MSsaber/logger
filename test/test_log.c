@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <log.h>
 #include <trace.h>
+#include <stdarg.h>
 
 #define FILE_NAME "testlog"
 #if PLATFORM_GE
@@ -8,6 +9,18 @@
 #else
 #define PATH "C:\\Users\\86189\\Desktop\\"
 #endif
+
+void logger_print(const char *fmt, ...)
+{
+    char buf[256];
+    int n;
+    va_list ap;
+    va_start(ap, fmt);
+    vsprintf(buf, fmt, ap);
+    va_end(ap);
+    printf("%s", (const char*)buf);
+}
+
 
 int main(void)
 {
