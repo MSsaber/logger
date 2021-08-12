@@ -18,8 +18,8 @@ extern "C" {
  * [out] logger_fd : if init seccessed, return a valid logger fd
  */
 extern int initialize_logger(long *logger_fd,
-                             char *path, uint32_t path_len,
-                             char *file_name, uint32_t file_name_len);
+                             const char *path, uint32_t path_len,
+                             const char *file_name, uint32_t file_name_len);
 
 /**
  * func : destory logger by fd
@@ -28,7 +28,7 @@ extern int initialize_logger(long *logger_fd,
  */
 extern void destory_logger(long logger_fd);
 
-extern void log_info(long logger_fd, bool dt, char *format, ...);
+extern void log_info(long logger_fd, bool dt, const char *format, ...);
 
 extern void hexdump(long logger_fd, char *buf, uint32_t buf_size);
 

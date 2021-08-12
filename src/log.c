@@ -38,7 +38,7 @@ static void *alloc(uint32_t size, char c)
     return buf;
 }
 
-static uint32_t move_buffer(char *in, uint32_t in_len,
+static uint32_t move_buffer(const char *in, uint32_t in_len,
                             pchar *out, uint32_t *out_len)
 {
     char *buf = NULL;
@@ -120,8 +120,8 @@ error:
 }
 
 int initialize_logger(long *logger_fd,
-                      char *path, uint32_t path_len,
-                      char *file_name, uint32_t file_name_len)
+                      const char *path, uint32_t path_len,
+                      const char *file_name, uint32_t file_name_len)
 {
     uint32_t res = LOG_SUCCESS;
     Log *logger = NULL;
@@ -152,7 +152,7 @@ void destory_logger(long logger_fd)
     destory_logger_handle(log_handle);
 }
 
-void log_info(long logger_fd, bool dt, char *format, ...)
+void log_info(long logger_fd, bool dt, const char *format, ...)
 {
     char buf[512];
     Log *logger = (Log *) logger_fd;
