@@ -30,7 +30,7 @@ extern void destory_logger(long logger_fd);
 
 extern void log_info(long logger_fd, bool dt, const char *format, ...);
 
-extern void hexdump(long logger_fd, char *buf, uint32_t buf_size);
+extern void hexdump(long logger_fd, const uint8_t *buf, uint32_t buf_size);
 
 #ifdef __cplusplus
 }

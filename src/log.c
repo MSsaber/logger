@@ -175,7 +175,7 @@ void log_info(long logger_fd, bool dt, const char *format, ...)
     logger->log_file = NULL;
 }
 
-void hexdump(long logger_fd, char *buf, uint32_t buf_size)
+void hexdump(long logger_fd, const uint8_t *buf, uint32_t buf_size)
 {
     if (!logger_fd) return;
 
