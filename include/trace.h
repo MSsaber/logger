@@ -30,7 +30,7 @@ extern long logger;
 
 #define WLOG(fmt, ...) log_info(logger, true, "[WARNING] %s : %d " fmt, __func__, __LINE__, ##__VA_ARGS__)
 
-#define HEXDUMP(fmt, ...) hexdump(logger, buf, size)
+#define HEXDUMP(buf, size) hexdump(logger, buf, size)
 
 #else
 
