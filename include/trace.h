@@ -16,7 +16,7 @@ extern void logger_print(const char *fmt, ...);
 
 #ifdef STATIC_CONFIG
 
-extern long logger;
+extern void * logger;
 
 #define OPEN(path, file) initialize_logger(&logger, path, strlen(path), file, strlen(file))
 

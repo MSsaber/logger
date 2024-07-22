@@ -16,7 +16,7 @@
 #define ALLOC(size, c, type) ((type) alloc(size, c))
 
 #ifdef STATIC_CONFIG
-long logger = 0;
+void * logger = 0;
 #endif
 
 typedef char * pchar;
@@ -79,7 +79,7 @@ static void time_log(FILE *f)
 
     logger_print("%4d-%02d-%02d %02d:%02d:%02d  ",
         START_YEAR + a->tm_year,1+a->tm_mon,a->tm_mday,
-        a->tm_hour,a->tm_min,a->tm_sec); 
+        a->tm_hour,a->tm_min,a->tm_sec);
 
     fprintf(f, "%4d-%02d-%02d %02d:%02d:%02d  ",
         START_YEAR + a->tm_year,1+a->tm_mon,a->tm_mday,
@@ -119,7 +119,7 @@ error:
     return (int) res;
 }
 
-int initialize_logger(long *logger_fd,
+int initialize_logger(void **logger_fd,
                       const char *path, uint32_t path_len,
                       const char *file_name, uint32_t file_name_len)
 {
@@ -137,7 +137,7 @@ int initialize_logger(long *logger_fd,
     res = move_buffer(file_name, file_name_len, &logger->file_name, &file_name_len);
     if (res) goto error;
 
-    *logger_fd = (long) logger;
+    *logger_fd = (void *) logger;
 
     return (int) LOG_SUCCESS;
 error:
@@ -145,14 +145,14 @@ error:
     return (int) res;
 }
 
-void destory_logger(long logger_fd)
+void destory_logger(void * logger_fd)
 {
     Log *log_handle = (Log *)logger_fd;
 
     destory_logger_handle(log_handle);
 }
 
-void log_info(long logger_fd, bool dt, const char *format, ...)
+void log_info(void * logger_fd, bool dt, const char *format, ...)
 {
     char buf[512];
     Log *logger = (Log *) logger_fd;
@@ -175,7 +175,7 @@ void log_info(long logger_fd, bool dt, const char *format, ...)
     logger->log_file = NULL;
 }
 
-void hexdump(long logger_fd, const uint8_t *buf, uint32_t buf_size)
+void hexdump(void * logger_fd, const uint8_t *buf, uint32_t buf_size)
 {
     if (!logger_fd) return;
 
