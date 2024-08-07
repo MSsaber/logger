@@ -6,6 +6,8 @@
 #include <log.h>
 #include <trace.h>
 
+#include <sys/time.h>
+
 #define LOG_SUCCESS    0x00000000
 #define LOG_FOE        0x0000fffd
 #define LOG_GENERAIC   0x0000fffe
@@ -74,16 +76,22 @@ static void time_log(FILE *f)
 {
     time_t t;
     struct tm * a;
+    struct timeval tv;
+    char ms_buf[4] = {0};
     time(&t);
     a=localtime(&t);
 
-    logger_print("%4d-%02d-%02d %02d:%02d:%02d  ",
-        START_YEAR + a->tm_year,1+a->tm_mon,a->tm_mday,
-        a->tm_hour,a->tm_min,a->tm_sec);
+    gettimeofday(&tv, NULL);
 
-    fprintf(f, "%4d-%02d-%02d %02d:%02d:%02d  ",
+    snprintf(ms_buf, sizeof(ms_buf), "%03ld", tv.tv_usec / (long)1000);
+
+    logger_print("%4d-%02d-%02d %02d:%02d:%02d.%s  ",
         START_YEAR + a->tm_year,1+a->tm_mon,a->tm_mday,
-        a->tm_hour,a->tm_min,a->tm_sec);
+        a->tm_hour,a->tm_min,a->tm_sec, ms_buf);
+
+    fprintf(f, "%4d-%02d-%02d %02d:%02d:%02d.%s  ",
+        START_YEAR + a->tm_year,1+a->tm_mon,a->tm_mday,
+        a->tm_hour,a->tm_min,a->tm_sec, ms_buf);
 }
 
 static int open_file(Log *logger)
